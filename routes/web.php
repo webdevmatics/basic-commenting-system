@@ -1,4 +1,7 @@
+
 <?php
+
+use App\Comment;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,4 +16,18 @@
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/status', function () {
+	$comments=Comment::where('approve','1')->get();
+    return view('front')->with('comments',$comments);
+});
+
+Route::post('/comment','CommentsController@store');
+Route::post('/toggle-approve','CommentsController@approval');
+
+Route::get('/dash',function(){
+	$comments=Comment::orderBy('created_at','desc')->get();
+    return view('dashboard')->with('comments',$comments);
+
 });
